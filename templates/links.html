@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Services</title>
+    <style>
+        html, body{
+            margin:0;
+            font-family:"Segoe UI", Arial;
+            background:linear-gradient(135deg,#eef2ff,#f8fafc);
+            overflow-x:hidden;
+        }
+
+        .card{
+            max-width:1100px;
+            width:100%;
+            margin:30px auto 30px 60px;
+            background:#ffffff;
+            border-radius:20px;
+            box-shadow:0 25px 50px rgba(0,0,0,0.15);
+            padding:26px 28px 30px;
+            animation:fade .4s ease;
+        }
+
+        @keyframes fade{
+            from{opacity:0; transform:translateY(16px)}
+            to{opacity:1; transform:translateY(0)}
+        }
+
+        h2{
+            margin-top:0;
+            font-size:28px;
+            color:#1e293b;
+            font-weight:800;
+        }
+
+        .upload-bar{
+            position:sticky;
+            top:0;
+            background:#ffffff;
+            z-index:50;
+            padding-bottom:16px;
+            margin-bottom:14px;
+            border-bottom:1px dashed #e2e8f0;
+        }
+
+        .form-grid{
+            display:grid;
+            grid-template-columns: 1.6fr 2fr 160px;
+            gap:14px;
+            align-items:center;
+        }
+
+        .form-grid input, .form-grid select{
+            padding:11px 14px;
+            border-radius:12px;
+            border:1px solid #e2e8f0;
+            outline:none;
+            font-size:13px;
+        }
+
+        .form-grid button{
+            padding:11px 18px;
+            border-radius:12px;
+            border:none;
+            background:#2563eb;
+            color:white;
+            cursor:pointer;
+            font-weight:700;
+            box-shadow:0 8px 18px rgba(37,99,235,.35);
+        }
+
+        .search-box{
+            margin:12px 0 16px;
+            width:280px;
+            padding:10px 14px;
+            border-radius:12px;
+            border:1px solid #e2e8f0;
+            font-size:13px;
+        }
+
+        .grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap:20px;
+        }
+
+        .service-card{
+            background:#f8fafc;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            padding:12px;
+            text-align:center;
+            box-shadow:0 6px 14px rgba(0,0,0,0.06);
+            transition:.2s;
+        }
+
+        .service-card:hover{
+            transform:translateY(-4px);
+            box-shadow:0 14px 30px rgba(0,0,0,0.12);
+        }
+
+        .service-card img{
+            width:100%;
+            height:120px;
+            object-fit:contain;
+            border-radius:12px;
+            background:#fff;
+        }
+
+        .service-card h4{
+            margin:10px 0 8px;
+            font-size:15px;
+            color:#1e293b;
+            font-weight:700;
+        }
+
+        .service-card .open{
+            display:inline-block;
+            padding:7px 14px;
+            background:#2563eb;
+            color:#fff;
+            border-radius:10px;
+            text-decoration:none;
+            font-size:12px;
+            font-weight:600;
+        }
+
+        .service-card .del{
+            display:block;
+            margin-top:6px;
+            color:#ef4444;
+            font-size:12px;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .back{
+            display:inline-block;
+            margin-top:18px;
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:700;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <h2>
+        {% if cat == 'apps' %} Apps
+        {% elif cat == 'govt' %} Government Schemes
+        {% elif cat == 'skills' %} Skill Links
+        {% endif %}
+    </h2>
+
+    <div class="upload-bar">
+        {% if session['is_admin'] == 1 %}
+        <form method="post" enctype="multipart/form-data" class="form-grid">
+    <input name="title" placeholder="Title" required>
+    <input name="url" placeholder="Website URL" required>
+    <input type="file" name="image" required>
+    <button>Add</button>
+</form>
+
+        {% endif %}
+    </div>
+
+    <input type="text" id="searchBox" class="search-box" placeholder="Search...">
+
+    <div class="grid">
+    {% for l in data %}
+        <div class="service-card">
+            <img src="/static/uploads/link_images/{{ l[3] }}" alt="{{ l[1] }}">
+            <h4>{{ l[1] }}</h4>
+            <a class="open" href="{{ l[2] }}" target="_blank">Open</a>
+
+            {% if session['is_admin'] == 1 %}
+                <a class="del" href="/delete_link/{{ l[0] }}/{{ cat }}"
+                   onclick="return confirm('Delete this item?')">Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+
+    <a class="back" href="/dashboard" target="_top">← Back to Dashboard</a>
+</div>
+
+<script>
+document.getElementById("searchBox").addEventListener("keyup", function () {
+    let val = this.value.toLowerCase();
+    document.querySelectorAll(".service-card").forEach(function (box) {
+        box.style.display = box.innerText.toLowerCase().includes(val) ? "" : "none";
+    });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Timetable</title>
+    <style>
+        body{
+            margin:0;
+            font-family:"Segoe UI", Arial;
+            background:#f0f4f8;
+            padding:20px;
+        }
+
+        h2{
+            margin:0 0 16px;
+            color:#1e293b;
+        }
+
+        .card{
+            max-width:900px;
+            margin:auto;
+            background:#ffffff;
+            border-radius:18px;
+            box-shadow:0 20px 40px rgba(0,0,0,0.1);
+            padding:22px 26px 26px;
+        }
+
+        .form-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+            gap:12px;
+            margin-bottom:18px;
+        }
+
+        .form-grid select,
+        .form-grid input{
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid #e2e8f0;
+            font-size:13px;
+            outline:none;
+        }
+
+        .form-grid button{
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:10px;
+            padding:10px 14px;
+            cursor:pointer;
+            box-shadow:0 6px 14px rgba(37,99,235,.35);
+            transition:.2s;
+        }
+
+        .form-grid button:hover{
+            background:#1e4fd8;
+            transform:translateY(-1px);
+        }
+
+        .table-wrap{
+            margin-top:12px;
+            border-radius:14px;
+            overflow:hidden;
+            border:1px solid #e2e8f0;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            font-size:13px;
+        }
+
+        thead{
+            background:#f1f5f9;
+        }
+
+        th,td{
+            padding:12px 14px;
+            text-align:left;
+        }
+
+        th{
+            color:#1e293b;
+            font-weight:700;
+            border-bottom:1px solid #e2e8f0;
+        }
+
+        td{
+            color:#334155;
+            border-bottom:1px solid #f1f5f9;
+        }
+
+        tr:hover td{
+            background:#f8fafc;
+        }
+
+        .del{
+            color:#dc2626;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .del:hover{
+            text-decoration:underline;
+        }
+
+        .back{
+            display:inline-block;
+            margin-top:16px;
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        .back:hover{
+            text-decoration:underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>My Timetable</h2>
+
+    <form method="post" class="form-grid">
+        <select name="day" required>
+            <option value="">Day</option>
+            <option>Monday</option>
+            <option>Tuesday</option>
+            <option>Wednesday</option>
+            <option>Thursday</option>
+            <option>Friday</option>
+            <option>Saturday</option>
+            <option>Sunday</option>
+        </select>
+
+        <input type="text" name="subject" placeholder="Subject" required>
+        <input type="time" name="time_from" required>
+        <input type="time" name="time_to" required>
+        <button>Add</button>
+    </form>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Subject</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in data %}
+                <tr>
+                    <td>{{ t[2] }}</td>
+                    <td>{{ t[3] }}</td>
+                    <td>{{ t[4] }}</td>
+                    <td>{{ t[5] }}</td>
+                    <td>
+                        <a class="del" href="/delete_timetable/{{ t[0] }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="/dashboard" target="_top">Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

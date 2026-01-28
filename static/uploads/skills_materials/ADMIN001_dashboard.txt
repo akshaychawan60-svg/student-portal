@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head><title>Owner Dashboard</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h2>Owner Dashboard</h2>
+
+<h3>Fee Requests</h3>
+{% if requests %}
+<table border="1">
+<tr><th>Student</th><th>Month</th><th>Action</th></tr>
+{% for r in requests %}
+<tr>
+<td>{{ r.name }}</td>
+<td>{{ r.month }}</td>
+<td>
+<form method="POST" action="/confirm">
+<input type="hidden" name="rid" value="{{ r.request_id }}">
+<button type="submit">Confirm Paid</button>
+</form>
+</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}<p>No pending requests.</p>{% endif %}
+
+<hr>
+<h3>All Students - Fees Overview</h3>
+<table border="1">
+<tr><th>ID</th><th>Name</th><th>Month</th><th>Status</th></tr>
+{% for s in students %}
+<tr>
+<td>{{ s.student_id }}</td><td>{{ s.name }}</td><td>{{ s.month }}</td><td>{{ s.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+<h3>Student Complaints</h3>
+{% if complaints %}
+<table border="1">
+<tr><th>Student</th><th>Complaint</th></tr>
+{% for c in complaints %}
+<tr>
+<td>{{ c.name }}</td>
+<td>{{ c.description }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<p>No complaints.</p>
+{% endif %}
+<h3>All Students - Fees & Cleaning Overview</h3>
+<table border="1">
+<tr>
+<th>ID</th><th>Name</th><th>Month</th><th>Fee Status</th><th>Cleaning Status</th>
+</tr>
+{% for s in students %}
+<tr>
+<td>{{ s.student_id }}</td>
+<td>{{ s.name }}</td>
+<td>{{ s.month }}</td>
+<td>{{ s.fee_status }}</td>
+<td>{{ s.cleaning_status }}</td>
+</tr>
+{% endfor %}
+</table>
+<h2>Students</h2>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Room</th>
+        <th>College</th>
+        <th>Action</th>
+    </tr>
+
+    {% for s in students %}
+<tr>
+    <td>{{ s.student_id }}</td>
+    <td>{{ s.name }}</td>
+    <td>{{ s.month }}</td>
+    <td>{{ s.fee_status }}</td>
+    <td>{{ s.cleaning_status }}</td>
+    <td>
+        <form method="post" action="/delete_student/{{ s.student_id }}"
+              onsubmit="return confirm('Are you sure you want to delete this student?');">
+            <button class="delete-btn">🗑 Delete</button>
+        </form>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+<a href="/logout">Logout</a>
+</body>
+</html>

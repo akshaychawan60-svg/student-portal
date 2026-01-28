@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Account</title>
+    <style>
+:root {
+  /* White Card Design Colors */
+  --page-bg: #f0f4f8;
+  --card-white: #ffffff;
+  --card-border: #e2e8f0;
+  --button-blue: #0061ff;
+  --text-dark: #1e293b;
+  --text-grey: #64748b;
+
+  /* Dark Menu Colors (for later use) */
+  --sidebar-bg: #0b0e14;
+  --sidebar-item-hover: #1a1f26;
+  --primary-blue: #2563eb;
+  --muted-text: #94a3b8;
+}
+
+body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--page-bg);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.card{
+    width:520px;
+    background: var(--card-white);
+    border:1px solid var(--card-border);
+    border-radius:10px;
+    padding:26px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.card h2{
+    margin:0;
+    font-size:26px;
+    font-weight:bold;
+    color: var(--text-dark);
+}
+
+.card .sub{
+    margin-top:6px;
+    font-size:14px;
+    color: var(--text-grey);
+}
+
+.card .sub a{
+    color: var(--button-blue);
+    text-decoration:none;
+    font-weight:500;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:18px;
+}
+
+.grid input,
+.grid select{
+    width:100%;
+    padding:8px 10px;              /* reduced height */
+    border:1px solid var(--card-border);
+    border-radius:6px;             /* smaller radius */
+    outline:none;
+    font-size:13.5px;
+    color: var(--text-dark);
+}
+
+.grid input::placeholder{
+    color: var(--text-grey);
+}
+
+.grid input:focus,
+.grid select:focus{
+    border-color: var(--primary-blue);
+    box-shadow:0 0 0 2px rgba(37,99,235,0.15);
+}
+
+.full{
+    grid-column:span 2;
+}
+
+.btn{
+    width:100%;
+    padding:10px;
+    background: var(--button-blue);
+    color:white;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    cursor:pointer;
+    margin-top:14px;
+}
+
+.btn:hover{
+    background:#004fe0;
+}
+
+.footer{
+    text-align:center;
+    margin-top:12px;
+    font-size:12.5px;
+    color: var(--text-grey);
+}
+</style>
+
+</head>
+<body>
+
+<div class="card">
+    <h2>Create Account</h2>
+    <div class="sub">Already have an account? <a href="/">Sign in</a></div>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="grid">
+            <input name="rollno" placeholder="Roll Number" required>
+            <input name="name" placeholder="Full Name" required>
+
+            <select name="year">
+                <option>1st Year</option>
+                <option>2nd Year</option>
+                <option>3rd Year</option>
+                <option>4th Year</option>
+            </select>
+
+            <select name="branch">
+                <option>Information Technology</option>
+                <option>Computer Science</option>
+                <option>Mechanical</option>
+                <option>Civil</option>
+            </select>
+
+            <input name="semester" placeholder="Semester">
+            <input name="college" placeholder="College Name">
+
+            <input type="email" name="email" placeholder="Email Address" class="full" required>
+
+            <input type="file" name="photo" class="full" required>
+
+            <input type="password" name="password" placeholder="Password" class="full" required>
+            <input type="password" name="vault_password" placeholder="Secret Vault Password" class="full" required>
+        </div>
+
+        <button class="btn">Create Account</button>
+    </form>
+
+    <div class="footer">
+        By creating an account, you agree to use this portal responsibly.
+    </div>
+</div>
+
+</body>
+</html>

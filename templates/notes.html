@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shared Notes</title>
+    <style>
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            font-family: "Segoe UI", Arial;
+            background: #f0f4f8;
+        }
+
+        .card {
+    max-width: 1100px;
+    margin: 30px auto 30px 90px; /* push right from sidebar */
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    padding: 26px;
+}
+
+
+        h2 {
+            margin-top: 0;
+            font-size: 26px;
+            color: #1e293b;
+        }
+
+        .upload-bar {
+            position: sticky;
+            top: 0;
+            background: #ffffff;
+            z-index: 50;
+            padding-bottom: 14px;
+            margin-bottom: 12px;
+        }
+
+        .form-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 180px 1.4fr 140px;
+        gap: 14px;
+        align-items: center;
+        max-width: 100%;
+    }
+
+
+        .form-grid input,
+        .form-grid select {
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            outline: none;
+        }
+
+        .form-grid button {
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: none;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .form-grid button:hover {
+            background: #1e4fd8;
+        }
+
+        .search-box {
+            margin: 10px 0 14px;
+            width: 260px;
+            padding: 9px 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .file-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+        }
+
+        .file-card h4 {
+            margin: 0 0 6px;
+            font-size: 15px;
+            color: #1e293b;
+        }
+
+        .file-card .cat {
+            font-size: 12px;
+            color: #64748b;
+            margin: 0 0 4px;
+        }
+
+        .file-card .by {
+            font-size: 12px;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .file-card .open {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #2563eb;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .file-card .del {
+            display: inline-block;
+            margin-left: 8px;
+            color: #ef4444;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 16px;
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Shared Notes & Question Papers</h2>
+
+    <div class="upload-bar">
+        <form method="post" enctype="multipart/form-data" class="form-grid">
+            <input type="text" name="title" placeholder="Title" required>
+
+            <select name="category">
+                <option>Notes</option>
+                <option>Previous Year Question Paper</option>
+                <option>Syllabus</option>
+                <option>Other</option>
+            </select>
+
+            <input type="file" name="file" required>
+
+            <button>Upload</button>
+        </form>
+    </div>
+
+    <input type="text" id="searchBox" class="search-box" placeholder="Search here...">
+
+    <div class="file-grid">
+    {% for n in data %}
+        <div class="file-card">
+            <h4>{{ n[2] }}</h4>
+            <p class="cat">{{ n[3] }}</p>
+            <p class="by">{{ n[5] }} ({{ n[1] }})</p>
+
+            <a class="open" href="/static/uploads/notes/{{ n[4] }}" target="_blank">
+                View / Download
+            </a>
+
+            {% if session['is_admin'] == 1 %}
+                <a class="del" href="/delete_note/{{ n[0] }}"
+                   onclick="return confirm('Delete this note?')">Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+
+    <a href="/dashboard" target="_top">Back to Dashboard</a>
+
+</div>
+
+<script>
+document.getElementById("searchBox").addEventListener("keyup", function () {
+    let val = this.value.toLowerCase();
+    document.querySelectorAll(".file-card").forEach(function (card) {
+        card.style.display = card.innerText.toLowerCase().includes(val) ? "" : "none";
+    });
+});
+</script>
+
+</body>
+</html>

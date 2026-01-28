@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skill Videos</title>
+    <style>
+        html, body{
+            margin:0;
+            font-family:"Segoe UI", Arial;
+            background:#f0f4f8;
+            overflow-x:hidden;
+        }
+
+        .card{
+            max-width:1100px;
+            width:100%;
+            margin:30px auto 30px 70px;
+            background:#ffffff;
+            border-radius:18px;
+            box-shadow:0 20px 40px rgba(0,0,0,0.12);
+            padding:26px;
+        }
+
+        h2{
+            margin-top:0;
+            font-size:26px;
+            color:#1e293b;
+        }
+
+        .upload-bar{
+            position:sticky;
+            top:0;
+            background:#ffffff;
+            z-index:50;
+            padding-bottom:14px;
+            margin-bottom:12px;
+        }
+
+        .form-grid{
+            display:grid;
+            grid-template-columns: 1.6fr 2fr 140px;
+            gap:14px;
+            align-items:center;
+        }
+
+        .form-grid input{
+            padding:10px 12px;
+            border-radius:10px;
+            border:1px solid #e2e8f0;
+            outline:none;
+        }
+
+        .form-grid button{
+            padding:10px 18px;
+            border-radius:10px;
+            border:none;
+            background:#2563eb;
+            color:white;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        .form-grid button:hover{
+            background:#1e4fd8;
+        }
+
+        .search-box{
+            margin:10px 0 14px;
+            width:260px;
+            padding:9px 12px;
+            border-radius:10px;
+            border:1px solid #e2e8f0;
+        }
+
+        .videos-wrapper{
+            display:grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap:18px;
+        }
+
+        .video-box{
+            background:#f8fafc;
+            border:1px solid #e2e8f0;
+            border-radius:14px;
+            padding:12px;
+            box-shadow:0 6px 14px rgba(0,0,0,0.06);
+        }
+
+        .video-box h4{
+            margin:0 0 8px;
+            font-size:15px;
+            color:#1e293b;
+        }
+
+        .video-box iframe{
+            width:100%;
+            height:170px;
+            border-radius:10px;
+        }
+
+        .video-box a.open{
+            display:inline-block;
+            margin-top:8px;
+            padding:6px 12px;
+            background:#2563eb;
+            color:#fff;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:12px;
+        }
+
+        .video-box .del{
+            display:inline-block;
+            margin-left:8px;
+            color:#ef4444;
+            font-size:12px;
+            text-decoration:none;
+        }
+
+        .back{
+            display:inline-block;
+            margin-top:16px;
+            color:#2563eb;
+            text-decoration:none;
+            font-weight:600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Skill Videos & Links</h2>
+
+    <div class="upload-bar">
+        {% if session['is_admin'] == 1 %}
+        <form method="post" class="form-grid">
+            <input name="title" placeholder="Video Title" required>
+            <input name="url" placeholder="YouTube / Link URL" required>
+            <button>Add</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <input type="text" id="searchBox" class="search-box" placeholder="Search videos...">
+
+    <div class="videos-wrapper">
+    {% for v in data %}
+        <div class="video-box">
+            <h4>{{ v[2] }}</h4>
+
+            {% if "youtube.com" in v[3] or "youtu.be" in v[3] %}
+                <iframe 
+                    src="https://www.youtube.com/embed/{{ v[3].split('v=')[-1].split('/')[-1] }}" 
+                    frameborder="0" allowfullscreen>
+                </iframe>
+            {% else %}
+                <a class="open" href="{{ v[3] }}" target="_blank">Open Link</a>
+            {% endif %}
+
+            {% if session['is_admin'] == 1 %}
+                <a class="del" href="/delete_skill/{{ v[0] }}/video"
+                   onclick="return confirm('Delete this video?')">Delete</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+    </div>
+   <a href="/dashboard" target="_top">Back to Dashboard</a>
+</div>
+
+<script>
+document.getElementById("searchBox").addEventListener("keyup", function () {
+    let val = this.value.toLowerCase();
+    document.querySelectorAll(".video-box").forEach(function (box) {
+        box.style.display = box.innerText.toLowerCase().includes(val) ? "" : "none";
+    });
+});
+</script>
+
+</body>
+</html>
