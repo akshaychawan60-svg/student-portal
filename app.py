@@ -483,8 +483,8 @@ def logout():
     return redirect("/")
 
 
-# THIS MUST BE THE LAST LINE IN THE FILE
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 5000)))
+# Railway / Gunicorn entry point
+application = app
+
 
 
